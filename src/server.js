@@ -4,7 +4,7 @@ const path = require('node:path');
 const crypto = require('node:crypto');
 
 const port = Number(process.env.PORT || 4000);
-const origin = process.env.FRONTEND_ORIGIN || 'http://localhost:5173';
+const allowedOrigins = (process.env.FRONTEND_ORIGIN || 'http://localhost:5173').split(',').map(value => value.trim()).filter(Boolean);
 const isProduction = process.env.NODE_ENV === 'production';
 const adminToken = process.env.ADMIN_TOKEN || (isProduction ? '' : 'findam-admin-dev-token');
 const authSecret = process.env.AUTH_SECRET || (isProduction ? '' : 'findam-development-secret-change-me');
@@ -24,7 +24,7 @@ function ensureStore() {
 if (isProduction && (!adminToken || adminToken.length < 24 || !authSecret || authSecret.length < 24)) throw new Error('Production requires ADMIN_TOKEN and AUTH_SECRET of at least 24 characters');
 function readStore() { ensureStore(); return JSON.parse(fs.readFileSync(dataFile, 'utf8')); }
 function writeStore(store) { fs.writeFileSync(dataFile, JSON.stringify(store, null, 2)); }
-function send(res, status, body) { res.writeHead(status, { 'Content-Type': 'application/json; charset=utf-8', 'X-Content-Type-Options': 'nosniff', 'X-Frame-Options': 'DENY', 'Referrer-Policy': 'no-referrer', 'Access-Control-Allow-Origin': origin, 'Access-Control-Allow-Methods': 'GET,POST,PUT,DELETE,OPTIONS', 'Access-Control-Allow-Headers': 'Content-Type, Authorization, X-Admin-Token' }); res.end(JSON.stringify(body)); }
+function send(res, status, body) { const requestOrigin = res.req.headers.origin; const corsOrigin = requestOrigin && allowedOrigins.includes(requestOrigin) ? requestOrigin : allowedOrigins[0]; res.writeHead(status, { 'Content-Type': 'application/json; charset=utf-8', 'X-Content-Type-Options': 'nosniff', 'X-Frame-Options': 'DENY', 'Referrer-Policy': 'no-referrer', 'Access-Control-Allow-Origin': corsOrigin, 'Vary': 'Origin', 'Access-Control-Allow-Methods': 'GET,POST,PUT,DELETE,OPTIONS', 'Access-Control-Allow-Headers': 'Content-Type, Authorization, X-Admin-Token' }); res.end(JSON.stringify(body)); }
 function body(req) { return new Promise((resolve, reject) => { let raw = ''; req.on('data', chunk => { raw += chunk; if (raw.length > 15e6) reject(new Error('Payload too large')); }); req.on('end', () => { try { resolve(raw ? JSON.parse(raw) : {}); } catch { reject(new Error('Invalid JSON')); } }); }); }
 function saveImages(photos = []) { fs.mkdirSync(uploadDir, { recursive: true }); return photos.slice(0, 6).filter(photo => typeof photo === 'string' && photo.startsWith('data:image/')).map((photo) => { const match = photo.match(/^data:image\/(jpeg|jpg|png|webp);base64,(.+)$/); if (!match) return null; const extension = match[1] === 'jpeg' ? 'jpg' : match[1]; const filename = `${crypto.randomUUID()}.${extension}`; fs.writeFileSync(path.join(uploadDir, filename), Buffer.from(match[2], 'base64')); return `/uploads/${filename}`; }).filter(Boolean); }
 function id() { return crypto.randomUUID(); }
