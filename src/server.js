@@ -4,7 +4,7 @@ const path = require('node:path');
 const crypto = require('node:crypto');
 
 const port = Number(process.env.PORT || 4000);
-const allowedOrigins = (process.env.FRONTEND_ORIGIN || 'http://localhost:5173').split(',').map(value => value.trim()).filter(Boolean);
+const allowedOrigins = (process.env.FRONTEND_ORIGIN || 'http://localhost:5173,https://findam-website-3lj6fggfh-kumterencefuh-coders-projects.vercel.app').split(',').map(value => value.trim()).filter(Boolean);
 const isProduction = process.env.NODE_ENV === 'production';
 const adminToken = process.env.ADMIN_TOKEN || (isProduction ? '' : 'findam-admin-dev-token');
 const authSecret = process.env.AUTH_SECRET || (isProduction ? '' : 'findam-development-secret-change-me');
@@ -42,7 +42,7 @@ async function handler(req, res) {
   if (isRateLimited(req)) return send(res, 429, { error: 'Too many requests' });
   if (req.method === 'OPTIONS') return send(res, 204, {});
   const url = new URL(req.url, `http://${req.headers.host}`); const parts = url.pathname.split('/').filter(Boolean); const store = readStore();
-  if (req.method === 'GET' && parts[0] === 'uploads' && parts[1]) { const filename = path.basename(parts[1]); const file = path.join(uploadDir, filename); if (!fs.existsSync(file)) return send(res, 404, { error: 'Image not found' }); const extension = path.extname(file).toLowerCase(); const contentType = extension === '.png' ? 'image/png' : extension === '.webp' ? 'image/webp' : 'image/jpeg'; res.writeHead(200, { 'Content-Type': contentType, 'Access-Control-Allow-Origin': origin, 'Cache-Control': 'public, max-age=31536000, immutable' }); return res.end(fs.readFileSync(file)); }
+  if (req.method === 'GET' && parts[0] === 'uploads' && parts[1]) { const filename = path.basename(parts[1]); const file = path.join(uploadDir, filename); if (!fs.existsSync(file)) return send(res, 404, { error: 'Image not found' }); const extension = path.extname(file).toLowerCase(); const contentType = extension === '.png' ? 'image/png' : extension === '.webp' ? 'image/webp' : 'image/jpeg'; const requestOrigin = req.headers.origin; const corsOrigin = requestOrigin && allowedOrigins.includes(requestOrigin) ? requestOrigin : allowedOrigins[0]; res.writeHead(200, { 'Content-Type': contentType, 'Access-Control-Allow-Origin': corsOrigin, 'Vary': 'Origin', 'Cache-Control': 'public, max-age=31536000, immutable' }); return res.end(fs.readFileSync(file)); }
   if (req.method === 'GET' && url.pathname === '/') return send(res, 200, { service: 'Findam API', status: 'running', docs: ['/api/health', '/api/listings', '/api/favorites', '/api/bot'] });
   if (req.method === 'GET' && url.pathname === '/api/health') return send(res, 200, { status: 'ok', service: 'findam-api', time: new Date().toISOString() });
   if (req.method === 'POST' && url.pathname === '/api/auth/register') { const input = await body(req); if (!input.email || !input.password || String(input.password).length < 8) return send(res, 400, { error: 'Email and a password of at least 8 characters are required' }); store.users ||= []; if (store.users.some(user => user.email === input.email.toLowerCase())) return send(res, 409, { error: 'Account already exists' }); const user = { id: id(), email: input.email.toLowerCase(), name: input.name || '', passwordHash: hashPassword(input.password), role: 'user', createdAt: new Date().toISOString() }; store.users.push(user); writeStore(store); return send(res, 201, { data: { id: user.id, email: user.email, name: user.name, role: user.role }, token: tokenFor(user) }); }
