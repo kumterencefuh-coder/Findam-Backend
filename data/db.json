@@ -212,5 +212,15 @@
       "createdAt": "2026-09-08T00:47:44.148Z"
     }
   ],
-  "favorites": []
+  "favorites": [],
+  "users": [
+    {
+      "id": "89c3b2bd-9a1c-4bf7-9019-8d5a8bda2b69",
+      "email": "kumterencefuh@gmail.com",
+      "name": "Kum Terence Fuh",
+      "passwordHash": "fc3da6ebcc658f06110bb5cdebdedd65:33fcab8b5408bc3f5f0a3cbb5bdf8b9ec619c18ef1b0195a9add87bb0e3ce514",
+      "role": "user",
+      "createdAt": "2026-09-14T05:09:15.441Z"
+    }
+  ]
 }
