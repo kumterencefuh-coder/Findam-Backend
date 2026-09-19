@@ -221,6 +221,14 @@
       "passwordHash": "fc3da6ebcc658f06110bb5cdebdedd65:33fcab8b5408bc3f5f0a3cbb5bdf8b9ec619c18ef1b0195a9add87bb0e3ce514",
       "role": "user",
       "createdAt": "2026-09-14T05:09:15.441Z"
+    },
+    {
+      "id": "b1ca874d-3abe-4fe2-aa23-e867a9064135",
+      "email": "findamcameroon1@gmail.com",
+      "name": "Findam Cameroon Root Admin",
+      "passwordHash": "7d457c5b44aa81045a14cf42fd9e828f:7562ddc0d8756a80aa0c9090d01b29fd100f35ceabcc0e94344a02f8d4137376",
+      "role": "root_admin",
+      "createdAt": "2026-09-19T10:15:32.449Z"
     }
   ]
 }
