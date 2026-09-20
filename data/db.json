@@ -229,6 +229,14 @@
       "passwordHash": "7d457c5b44aa81045a14cf42fd9e828f:7562ddc0d8756a80aa0c9090d01b29fd100f35ceabcc0e94344a02f8d4137376",
       "role": "root_admin",
       "createdAt": "2026-09-19T10:15:32.449Z"
+    },
+    {
+      "id": "79d752a1-7090-4fd2-b8de-eb3f21af410a",
+      "email": "findamcameroon@gmail.com",
+      "name": "kjkkjkkj",
+      "passwordHash": "9036af80a0e3e79c09d91f84df059678:0306159a1ec3a52dae3c64a677da79e46b7d608deffb2d88f4a9b16d12f08d06",
+      "role": "user",
+      "createdAt": "2026-09-20T10:24:19.545Z"
     }
   ]
 }
