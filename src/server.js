@@ -3,6 +3,18 @@ const fs = require('node:fs');
 const path = require('node:path');
 const crypto = require('node:crypto');
 
+// Node does not load .env files automatically. Load the backend-local file
+// before reading any configuration so `npm run backend` behaves like Docker.
+function loadEnvFile(file) {
+  if (!fs.existsSync(file)) return;
+  for (const line of fs.readFileSync(file, 'utf8').split(/\r?\n/)) {
+    const match = line.match(/^\s*([A-Za-z_][A-Za-z0-9_]*)\s*=\s*(.*?)\s*$/);
+    if (!match || match[1].startsWith('#') || process.env[match[1]] !== undefined) continue;
+    process.env[match[1]] = match[2].replace(/^['"]|['"]$/g, '');
+  }
+}
+loadEnvFile(path.resolve(__dirname, '..', '.env'));
+
 const port = Number(process.env.PORT || 4000);
 const allowedOrigins = (process.env.FRONTEND_ORIGIN || 'http://localhost:5173,https://findam-website-3lj6fggfh-kumterencefuh-coders-projects.vercel.app').split(',').map(value => value.trim()).filter(Boolean);
 const isProduction = process.env.NODE_ENV === 'production';
