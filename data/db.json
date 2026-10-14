@@ -247,6 +247,33 @@
       "role": "admin",
       "verified": true,
       "createdAt": "2026-10-03T04:09:49.641Z"
+    },
+    {
+      "id": "22c911c7-ccb0-4cf1-a50d-ad253d441e15",
+      "email": "codex-0cdf7622-7f28-4182-955c-a1b46a6030f8@example.com",
+      "name": "Test User",
+      "passwordHash": "5718b6caf0a4a1dbe2c4f23357daf867:1e8960cf2d8212074f0bcf5c0505fcac2a54ccaf2e6d575e5c63c0941c805280",
+      "role": "user",
+      "verified": true,
+      "createdAt": "2026-10-14T04:29:08.028Z"
+    },
+    {
+      "id": "91dea750-0016-47ac-b9d6-0c35ac7b2a01",
+      "email": "codex-88d59ed9-005d-4115-852d-393f5142933b@example.com",
+      "name": "Test User",
+      "passwordHash": "b774f39c187e721a22d218c47e7705d3:d504c0ee036b09040690db7c22e0168d087d26cee01d3c6f235f6d541847ccaf",
+      "role": "user",
+      "verified": true,
+      "createdAt": "2026-10-14T04:30:02.836Z"
+    },
+    {
+      "id": "3bd8e43c-4d0a-4d8b-a0fa-15d0ca2274bf",
+      "email": "codex-check-bed1707e-0ba7-4660-a217-52fb66e6c13d@example.com",
+      "name": "Listing Check",
+      "passwordHash": "4af44f1e1bda018a0f7575c41a63695b:514613141491140e5a332aa48958a8f7f9bea2ed83e2dda9e5349cfd875de7d1",
+      "role": "user",
+      "verified": true,
+      "createdAt": "2026-10-14T04:33:29.487Z"
     }
   ]
 }
